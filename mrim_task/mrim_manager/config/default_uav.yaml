@@ -53,7 +53,7 @@ viewpoints:
 
 # Mission parameters
 mission:
-  timeout: 180.0 # (s)
+  timeout: 240.0 # (s)
 
 solution_time_constraint:
   hard: 60.0

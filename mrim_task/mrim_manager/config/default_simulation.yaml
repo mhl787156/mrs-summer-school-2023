@@ -22,9 +22,16 @@ dynamic_constraints:
 # Trajectory parameters
 trajectories:
   dt: 0.2 # (s)
+
+  # For planning
   min_distance:
     mutual:    3.0 # (m)
     obstacles: 2.0 # (m)
+
+  # For evaluation
+  check:
+    mutual: 2.7 # (m)
+    obstacles: 1.9 # (m)
 
   # UNUSED
   subscribe: True

@@ -162,8 +162,8 @@ class MrimManager:
         visualization_rviz = rospy.get_param('~visualization/rviz/use')
         playback_speed = rospy.get_param('~visualization/rviz/playback_speed')
         trajectory_dt = rospy.get_param('~trajectories/dt')
-        minimum_mutual_distance = rospy.get_param('~trajectories/min_distance/mutual')
-        minimum_obstacle_distance = rospy.get_param('~trajectories/min_distance/obstacles')
+        minimum_mutual_distance = rospy.get_param('~trajectories/check/mutual')
+        minimum_obstacle_distance = rospy.get_param('~trajectories/check/obstacles')
         rviz_config = rospy.get_param('~rviz_config')
         self.print_info = rospy.get_param('~print_info')
         global_frame = rospy.get_param('~global_frame')
@@ -415,6 +415,8 @@ class MrimManager:
         # start overall status publishing
         if not run_type == 'uav':
             self.overall_status = (flight_always_allowed or overall_status)
+        else:
+            self.overall_status = overall_status
         rospy.Timer(rospy.Duration(1), self.publishOverallStatus)
 
         # if overall_status:
@@ -939,6 +941,12 @@ class MrimManager:
                 self.publishPlaybackSimulation(trajectories, poses, obst_dists, mutual_dists, min_obst_dists,\
                                                min_mutual_dists, velocities, accelerations, travelled_dists, overall_statuses,\
                                                mission_time, minimum_obstacle_distance, minimum_mutual_distance)
+            else:
+                for k in range(len(trajectories)):
+                    self.visualizer_.publishUavStatistics(k, 0.0, 0.0, 0.0, 0.0, 0.0)
+                    jsk_msg = self.visualizer_.generateJskMsg(trajectories[k].trajectory_name, trajectories[k].length, trajectories[k].time, \
+                                                               0.0, 0.0, trajectories[k].dynamics_ok)
+                    self.visualizer_.publishJskMsg(jsk_msg, trajectories[k].overall_status, k)
 
             rospy.Rate(10).sleep() #TODO: tune to avoid missing inspection point due to too fast flight through the inspection point
 

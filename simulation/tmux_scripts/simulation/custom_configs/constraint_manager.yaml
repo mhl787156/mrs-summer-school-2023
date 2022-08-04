@@ -45,3 +45,11 @@ mrim:
     acceleration: 1.0
     jerk: 20.0
     snap: 20.0
+
+  angular_speed:
+    roll: 60.0
+    pitch: 60.0
+    yaw: 10.0
+
+  tilt: deg(60)
+

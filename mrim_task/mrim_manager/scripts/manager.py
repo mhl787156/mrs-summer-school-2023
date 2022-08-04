@@ -35,6 +35,8 @@ from mrim_manager.python_plotter import *
 
 def signal_handler(sig, frame):
     print('Ctrl+C pressed, signal.SIGINT received.')
+    if self.rviz_proc: 
+        self.rviz_proc.terminate()
     sys.exit(0)
 
 # #} end of signal_handler
@@ -184,6 +186,7 @@ class MrimManager:
         uav_names = rospy.get_param("~uav_names")
         self.solution_time_constraint_hard = rospy.get_param("~solution_time_constraint/hard")
         self.solution_time_constraint_soft = rospy.get_param("~solution_time_constraint/soft")
+        self.rviz_proc = None
 
         # #{ LOAD CONSTRAINTS
 
@@ -327,7 +330,7 @@ class MrimManager:
             self.visualizer_.setRvizConfig(rviz_config, tmp_rviz_config, self.evaluator_.inspection_problem.number_of_inspection_points,\
                                            self.mission_time_limit, self.solution_time_constraint_soft, self.solution_time_constraint_hard,\
                                            uav_names[0], uav_names[1])
-            rviz_proc = subprocess.Popen(['rviz', '-d', tmp_rviz_config], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            self.rviz_proc = subprocess.Popen(['rviz', '-d', tmp_rviz_config], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             rospy.Rate(0.2).sleep()
 
         # #} end of INITIALIZATION OF RVIZ VISUALIZER
@@ -944,6 +947,8 @@ class MrimManager:
         self.visualizer_.publishSafetyArea()
         self.visualizer_.publishStartPositions()
         self.visualizer_.publishPaths(trajectories)
+        self.visualizer_.publishInspectionPoints(self.evaluator_.inspection_problem.inspection_points, self.evaluator_.viewpoints)
+        self.visualizer_.publishViewPoints(self.evaluator_.inspection_problem.inspection_points, self.evaluator_.viewpoints)
         self.visualizer_.publishFullScreenMsg("")
 
         solution_time, solution_time_penalty = self.checkMaximumSolutionTime()

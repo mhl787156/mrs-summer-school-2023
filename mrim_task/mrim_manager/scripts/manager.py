@@ -417,9 +417,9 @@ class MrimManager:
                 self.visualizer_.publishFullScreenMsg("------ Maximum mission time exceeded! ------\n ------ Takeoff not allowed! ------")
 
         if not self.mission_time_exceeded: 
-            rospy.info("[MrimManager] [OK] Maximum length of the trajectory.")
+            rospy.loginfo("[MrimManager] [OK] Maximum length of the trajectory.")
         else: 
-            rospy.info("[MrimManager] [FAILED] Maximum length of the trajectory.")
+            rospy.loginfo("[MrimManager] [FAILED] Maximum length of the trajectory.")
 
         if overall_status:
             rospy.loginfo("[MrimManager] TRAJECTORY CHECKS: {:s}".format(boolToString(overall_status)))

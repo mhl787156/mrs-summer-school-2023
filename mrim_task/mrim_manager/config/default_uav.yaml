@@ -1,19 +1,25 @@
 print_info: False
 
 problem:
-  name: "ac_mockup.problem"
+  name: "real_world_competition.problem"
   plot: False
 
 # Frames
 global_frame: "rtk_origin"
-uav_names: ["uav1", "uav2"]
 
 # Dynamic constraints of the UAVs
 dynamic_constraints:
-  controller: "fast"            # controller constraints
-  max_velocity:             1.0 # (m/s)
-  max_acceleration:         1.0 # (m/s^2)
-  max_heading_rate:         1.0 # (rad/s)
+  controller: "fast" # controller constraints
+  tolerance: 0.01 # acceptable violation of constraints
+  max_velocity:             
+    x: 1.0 # (m/s)
+    y: 1.0 # (m/s)
+    z: 0.5 # (m/s)
+  max_acceleration:             
+    x: 1.0 # (m/s2)
+    y: 1.0 # (m/s2)
+    z: 0.5 # (m/s2)
+  max_heading_rate:         0.5 # (rad/s)
   max_heading_acceleration: 1.0 # (rad/s^2)
 
 # Trajectory parameters
@@ -34,7 +40,7 @@ viewpoints:
   distance: 4.0 # (m)
 
   inspection_limits:
-    distance: 0.5 # (m)
+    distance: 0.3 # (m)
     heading:  0.2 # (rad)
     pitch:    0.2 # (rad)
 
@@ -43,8 +49,8 @@ mission:
   timeout: 180.0 # (s)
 
 solution_time_constraint:
-  hard: 180.0
-  soft: 60.0
+  hard: 60.0
+  soft: 30.0
 
 # Cameras
 cameras:

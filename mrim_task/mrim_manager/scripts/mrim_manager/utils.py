@@ -193,17 +193,6 @@ class Trajectory:
             derivatives.append(Vector4d(dx, dy, dz, dheading))
 
         derivatives.append(Vector4d(0.0, 0.0, 0.0, 0.0))
-        k = 0 
-        if first_derivation: 
-            print("Vector:")
-            for p in vector: 
-                print(k, p.heading)
-                k = k + 1
-            print("Derivatives:")
-            k = 0
-            for p in derivatives: 
-                print(k, p.heading)
-                k = k + 1
         return derivatives
 
     def getNorms(self, vector):

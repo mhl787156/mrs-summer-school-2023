@@ -35,8 +35,6 @@ from mrim_manager.python_plotter import *
 
 def signal_handler(sig, frame):
     print('Ctrl+C pressed, signal.SIGINT received.')
-    if self.rviz_proc: 
-        self.rviz_proc.terminate()
     sys.exit(0)
 
 # #} end of signal_handler

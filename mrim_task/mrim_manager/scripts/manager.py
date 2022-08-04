@@ -407,6 +407,20 @@ class MrimManager:
             overall_status = False
             rospy.logerr("[MrimManager] UAV-to-obstacles distances were not checked due to missing input point cloud.")
 
+        for k in range(len(self.trajectories)):
+            if len(self.trajectories[k].poses)*self.trajectories[0].dt > self.mission_time_limit:
+                with self.diag_msg_lock:
+                    self.diag_msgs.append("-- Mission time limit exceeded! --")
+                self.mission_time_exceeded = True
+                self.evaluator_.setZeroScore()
+                overall_status = False
+                self.visualizer_.publishFullScreenMsg("------ Maximum mission time exceeded! ------\n ------ Takeoff not allowed! ------")
+
+        if not self.mission_time_exceeded: 
+            rospy.info("[MrimManager] [OK] Maximum length of the trajectory.")
+        else: 
+            rospy.info("[MrimManager] [FAILED] Maximum length of the trajectory.")
+
         if overall_status:
             rospy.loginfo("[MrimManager] TRAJECTORY CHECKS: {:s}".format(boolToString(overall_status)))
         else:
@@ -474,12 +488,23 @@ class MrimManager:
                                                               self.trajectories[k].min_obst_dist.item(), self.trajectories[k].min_mutual_dist,\
                                                               self.trajectories[k].dynamics_ok)
                     self.visualizer_.publishJskMsg(jsk_msg, self.trajectories[k].overall_status, k)
+                    self.visualizer_.publishObstacles()
+                    self.visualizer_.publishSafetyArea()
+                    self.visualizer_.publishPaths(self.trajectories)
+                    self.visualizer_.publishCollisions(self.trajectories, collisions_between_uavs)
 
                 self.visualizer_.publishFullScreenMsg("------ Constraints violated! ------\n ------ Takeoff not allowed! ------")
                 rate.sleep()
 
             if overall_status or (not run_type == 'uav' and flight_always_allowed):
                 self.visualizer_.publishFullScreenMsg("")
+                # jsk_msg = self.visualizer_.generateJskMsg(self.trajectories[k].trajectory_name, self.trajectories[k].length, trajectories[k].time, \
+                #                                            0.0, 0.0, trajectories[k].dynamics_ok)
+                # self.visualizer_.publishJskMsg(jsk_msg, self.trajectories[k].overall_status, k)
+                self.visualizer_.publishObstacles()
+                self.visualizer_.publishSafetyArea()
+                self.visualizer_.publishPaths(self.trajectories)
+                self.visualizer_.publishCollisions(self.trajectories, collisions_between_uavs)
                 self.runSimulationMonitoring(self.trajectories, minimum_obstacle_distance, minimum_mutual_distance, dynamic_constraints_ok_list)
         else:
             rospy.logwarn('[MrimManager] Unexpected run type: %s', run_type)
@@ -644,7 +669,7 @@ class MrimManager:
 
             # constraints_check_successful = vel_xy_ok and vel_asc_ok and vel_desc_ok and vel_heading_ok and acc_xy_ok and acc_asc_ok and acc_desc_ok and acc_heading_ok and jerk_xy_ok and jerk_asc_ok and jerk_desc_ok and jerk_heading_ok and snap_xy_ok and snap_asc_ok and snap_desc_ok and snap_heading_ok
             translation_constraints_check_successful = vel_x_ok and vel_y_ok and vel_asc_ok and vel_desc_ok and  acc_x_ok and acc_y_ok and acc_asc_ok and acc_desc_ok 
-            constraints_check_successful = translation_constraints_check_successful and vel_heading_ok and acc_heading_ok
+            constraints_check_successful = translation_constraints_check_successful # and vel_heading_ok and acc_heading_ok
 
             if not translation_constraints_check_successful:
                 self.evaluator_.setZeroScore()
@@ -799,9 +824,11 @@ class MrimManager:
         if len(trajectories) < 2:
             return min_dists_list
 
+        max_idx = max(len(trajectories[0].poses), len(trajectories[1].poses))
+
         for t in range(len(trajectories)):
             min_dists = []
-            for k in range(len(trajectories[t].poses)):
+            for k in range(max_idx):
                 min_dist = 1e6
                 min_idx = -1
                 for t_r in range(len(trajectories)):
@@ -809,7 +836,7 @@ class MrimManager:
                         continue
 
                     idx = min(k, len(trajectories[t_r].poses) - 1)
-                    dist = getTransitionPointDist(trajectories[t].poses[k], trajectories[t_r].poses[idx])
+                    dist = getTransitionPointDist(trajectories[t].poses[min(k, len(trajectories[t].poses) -1)], trajectories[t_r].poses[idx])
                     if dist < min_dist:
                         min_dist = dist
                         min_idx = t_r

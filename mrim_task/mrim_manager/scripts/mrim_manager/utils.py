@@ -220,7 +220,7 @@ class Trajectory:
         h1n = math.atan2(np.sin(h1), np.cos(h1))
         h2n = math.atan2(np.sin(h2), np.cos(h2))
         diff = h2n - h1n
-        diffn = diff if abs(diff) < math.pi else np.sign(diff) * 2*math.pi - diff
+        diffn = diff if abs(diff) < math.pi else -np.sign(diff) * (2*math.pi - abs(diff))
         return diffn
 
     def setStatistics(self, min_obst_dist, min_mutual_dist, dynamics_ok, overall_status):

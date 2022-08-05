@@ -921,12 +921,16 @@ void MrimStateMachine::switchState(State_t new_state) {
 
       startFollowing();
 
-      std_srvs::SetBool srv;
-      srv.request.data = true;
-      if (service_client_start_timer.call(srv)) {
-        ROS_INFO("[MrimStateMachine]: Mission timer started.");
-      } else {
-        ROS_ERROR("[MrimStateMachine]: Call for mission timer start fail.");
+      for (int i = 0; i < service_call_repeat_; i++) {
+
+        std_srvs::SetBool srv;
+        srv.request.data = true;
+        if (service_client_start_timer.call(srv)) {
+          ROS_INFO("[MrimStateMachine]: Mission timer started.");
+          break;
+        } else {
+          ROS_ERROR("[MrimStateMachine]: Call for mission timer start fail.");
+        }
       }
 
       start_time = ros::Time::now();
@@ -1043,12 +1047,16 @@ void MrimStateMachine::mainTimer([[maybe_unused]] const ros::TimerEvent& event) 
 
         flying_finished_ = true;
 
-        std_srvs::SetBool srv;
-        srv.request.data = false;
-        if (service_client_start_timer.call(srv)) {
-          ROS_INFO("[MrimStateMachine]: Mission timer stopped.");
-        } else {
-          ROS_ERROR("[MrimStateMachine]: Call for mission timer stop fail.");
+        for (int i = 0; i < service_call_repeat_; i++) {
+
+          std_srvs::SetBool srv;
+          srv.request.data = false;
+          if (service_client_start_timer.call(srv)) {
+            ROS_INFO("[MrimStateMachine]: Mission timer stopped.");
+            break;
+          } else {
+            ROS_ERROR("[MrimStateMachine]: Call for mission timer stop fail.");
+          }
         }
 
         if (land_) {

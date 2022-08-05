@@ -18,7 +18,7 @@ from sklearn.neighbors import KDTree
 import sensor_msgs
 import sensor_msgs.point_cloud2
 from std_msgs.msg import ColorRGBA, Float32, Empty, Bool
-from std_srvs.srv import Trigger
+from std_srvs.srv import Trigger, SetBool
 from nav_msgs.msg import Path, Odometry
 from geometry_msgs.msg import PoseStamped, PoseArray, Pose, Point, Quaternion, Vector3, TransformStamped
 from mrs_msgs.msg import TrajectoryReference, UavState
@@ -960,7 +960,7 @@ class MrimManager:
             self.task_monitor = TaskMonitor(trajectories, self.pcl_map, self.uav_states, minimum_obstacle_distance, minimum_mutual_distance, dynamic_constraints_ok_list)
 
         # init subscriber to have goal
-        srv_start_monitoring = rospy.Service('start_monitoring_in', Trigger, self.startMonitoringCallback)
+        srv_start_monitoring = rospy.Service('start_monitoring_in', SetBool, self.startMonitoringCallback)
 
         while not self.mission_finished:
             if self.mission_started:
@@ -1128,12 +1128,17 @@ class MrimManager:
     # #{ startMonitoringCallback()
 
     def startMonitoringCallback(self, req):
-        if not self.mission_started:
+        if req.data:
+            if not self.mission_started:
+                self.task_monitor.start()
+
             self.mission_started = True
-            self.task_monitor.start()
-        elif not self.mission_finished:
+
+        else:
+            if not self.mission_finished:
+                self.task_monitor.stop()
+
             self.mission_finished = True
-            self.task_monitor.stop()
 
     # #} end of startMonitoringCallback()
 

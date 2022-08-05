@@ -13,6 +13,7 @@
 #include <std_msgs/UInt8.h>
 #include <std_msgs/Bool.h>
 #include <std_srvs/Trigger.h>
+#include <std_srvs/SetBool.h>
 #include <std_srvs/Empty.h>
 
 #include <mrs_msgs/Vec4.h>
@@ -295,7 +296,7 @@ void MrimStateMachine::onInit() {
   service_client_validate_start_position_1 = nh_.serviceClient<mrs_msgs::ValidateReference>("validate_start_position_1_out");
   service_client_validate_start_position_2 = nh_.serviceClient<mrs_msgs::ValidateReference>("validate_start_position_2_out");
 
-  service_client_start_timer = nh_.serviceClient<std_srvs::Trigger>("start_out");
+  service_client_start_timer = nh_.serviceClient<std_srvs::SetBool>("start_out");
 
   // --------------------------------------------------------------
   // |                       service servers                      |
@@ -920,7 +921,8 @@ void MrimStateMachine::switchState(State_t new_state) {
 
       startFollowing();
 
-      std_srvs::Trigger srv;
+      std_srvs::SetBool srv;
+      srv.request.data = true;
       if (service_client_start_timer.call(srv)) {
         ROS_INFO("[MrimStateMachine]: Mission timer started.");
       } else {
@@ -1041,7 +1043,8 @@ void MrimStateMachine::mainTimer([[maybe_unused]] const ros::TimerEvent& event) 
 
         flying_finished_ = true;
 
-        std_srvs::Trigger srv;
+        std_srvs::SetBool srv;
+        srv.request.data = false;
         if (service_client_start_timer.call(srv)) {
           ROS_INFO("[MrimStateMachine]: Mission timer stopped.");
         } else {

@@ -80,6 +80,8 @@ private:
   bool flying_finished_ = false;
 
   std::string master_uav_name_;
+  std::string uav_name_1;
+  std::string uav_name_2;
 
   bool start_position_1_valid = false;
   bool start_position_2_valid = false;
@@ -251,6 +253,8 @@ void MrimStateMachine::onInit() {
   param_loader.loadParam("service_call_repeat", service_call_repeat_);
   param_loader.loadParam("land", land_);
   param_loader.loadParam("master_uav_name", master_uav_name_);
+  param_loader.loadParam("uav_name_1", uav_name_1);
+  param_loader.loadParam("uav_name_2", uav_name_2);
 
   // --------------------------------------------------------------
   // |                         subscribers                        |
@@ -796,9 +800,11 @@ void MrimStateMachine::loadTrajectoryTimerOneshot([[maybe_unused]] const ros::Ti
     ROS_WARN("[MrimStateMachine]: try to load trajectory for (%d) using publisher, no guarantees, be careful!", id);
     mrs_msgs::TrajectoryReference traj_msg;
     if (id == 1) {
+      traj_msg.input_id = std::stoi(uav_name_1);
       traj_msg = trajectory_1;
       publisher_load_trajectory_1.publish(traj_msg);
     } else {
+      traj_msg.input_id = std::stoi(uav_name_2);
       traj_msg = trajectory_2;
       publisher_load_trajectory_2.publish(traj_msg);
     }

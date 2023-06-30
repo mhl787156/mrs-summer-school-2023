@@ -123,6 +123,9 @@ private:
   // | ----------------------- publishers ----------------------- |
   ros::Publisher publisher_ready_to_takeoff_1;
   ros::Publisher publisher_ready_to_takeoff_2;
+  
+  ros::Publisher publisher_load_trajectory_1;
+  ros::Publisher publisher_load_trajectory_2;
 
   // | ----------------------- main timer ----------------------- |
   ros::Timer main_timer;
@@ -276,6 +279,9 @@ void MrimStateMachine::onInit() {
 
   publisher_ready_to_takeoff_1 = nh_.advertise<std_msgs::UInt8>("takeoff_1_out", 1);
   publisher_ready_to_takeoff_2 = nh_.advertise<std_msgs::UInt8>("takeoff_2_out", 1);
+  
+  publisher_load_trajectory_1 = nh_.advertise<mrs_msgs::TrajectoryReference>("load_trajectory_1_topic_out", 1);
+  publisher_load_trajectory_2 = nh_.advertise<mrs_msgs::TrajectoryReference>("load_trajectory_2_topic_out", 1);
 
   // --------------------------------------------------------------
   // |                       service clients                      |
@@ -743,6 +749,9 @@ void MrimStateMachine::loadTrajectoryTimerOneshot([[maybe_unused]] const ros::Ti
     srv_out.request.trajectory = trajectory_2;
   }
 
+  bool success = false;
+  std::string srv_message = "MPC tracker was not found in tracker names!";
+  std::string srv_message_active_tracker = "Nothing!";
   for (int i = 0; i < service_call_repeat_; i++) {
 
     if (id == 1) {
@@ -753,20 +762,22 @@ void MrimStateMachine::loadTrajectoryTimerOneshot([[maybe_unused]] const ros::Ti
 
     if (!srv_out.response.success) {
       // returned false because the MPC tracker is not currently active
-
+      srv_message_active_tracker = srv_out.response.message;
       for (unsigned int i = 0; i < srv_out.response.tracker_names.size(); i++) {
         if (srv_out.response.tracker_names[i] == "MpcTracker") {
           if (srv_out.response.tracker_successes[i]) {
             // trajectory is feasible for the MPC tracker
             goto loaded;
           }
+          srv_message = srv_out.response.tracker_messages[i];
         }
       }
-      ROS_ERROR("[MrimStateMachine]: call for loading trajectory (%d) failed", id);
+      ROS_ERROR("[MrimStateMachine]: call for loading trajectory (%d)failed: \n\tMPC tracker message: %s\n\tActive tracker message: %s", id, srv_message.c_str(), srv_message_active_tracker.c_str());
     } else {
     loaded:
 
       ROS_INFO("[MrimStateMachine]: trajectory loaded (%d)", id);
+      success = true;
 
       if (id == 1) {
         got_trajectory_1    = false;
@@ -777,6 +788,19 @@ void MrimStateMachine::loadTrajectoryTimerOneshot([[maybe_unused]] const ros::Ti
       }
 
       break;
+    }
+  }
+
+  if (!success)
+  {
+    ROS_WARN("[MrimStateMachine]: try to load trajectory for (%d) using publisher, no guarantees, be careful!", id);
+    mrs_msgs::TrajectoryReference traj_msg;
+    if (id == 1) {
+      traj_msg = trajectory_1;
+      publisher_load_trajectory_1.publish(traj_msg);
+    } else {
+      traj_msg = trajectory_2;
+      publisher_load_trajectory_2.publish(traj_msg);
     }
   }
 }

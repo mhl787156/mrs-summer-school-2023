@@ -74,15 +74,15 @@ Please go through the code and its inline comments to give you a better idea abo
 
 **Tips for improving the solution:**
 
-  1. Interpolate the heading between the samples. This is the first thing to solve if you want to score!
-  2. Test different methods available for estimating the distance between the VPs and for planning collision-free paths connecting the VPs [available planners: A*, RRT (default), RRT*].
-  3. Improve assignment of inspected points from 🟣 between the two UAVs (random by default).
-  4. Try different parameters of path planners (e.g., grid resolution or sampling distance) and evaluate their impact on the quality of your solution.
-  5. Increase performance of the chosen path planner (e.g., by path straightening or implementing informed RRT).
-  6. Consider flight time instead of path length when searching for the optimal sequence of locations in TSP.
-  7. Apply path smoothing and continuous trajectory sampling (no stops at waypoints) to speed up the flight. In the code, we have prepared the `toppra` library for computing path parametrizations [2]. Check out the documentation and try to utilize it.
-  8. Postprocess the time-parametrized trajectories to resolve collisions. Start by improving the implemented collision avoidance, e.g., by delaying trajectory start till there is no collision. Tip: try the methods available for you in the config file (see below).
-  9. Effectively redistribute IPs to avoid collisions and to achieve lower inspection time.
+- [ ] Interpolate the heading between the samples. This is the first thing to solve if you want to score!
+- [ ] Test different methods available for estimating the distance between the VPs and for planning collision-free paths connecting the VPs [available planners: A*, RRT (default), RRT*].
+- [ ] Improve assignment of inspected points from 🟣 between the two UAVs (random by default).
+- [ ] Try different parameters of path planners (e.g., grid resolution or sampling distance) and evaluate their impact on the quality of your solution.
+- [ ] Increase performance of the chosen path planner (e.g., by path straightening or implementing informed RRT).
+- [ ]  Consider flight time instead of path length when searching for the optimal sequence of locations in TSP.
+- [ ] Apply path smoothing and continuous trajectory sampling (no stops at waypoints) to speed up the flight. In the code, we have prepared the `toppra` library for computing path parametrizations [2]. Check out the documentation and try to utilize it.
+- [ ]  Postprocess the time-parametrized trajectories to resolve collisions. Start by improving the implemented collision avoidance, e.g., by delaying trajectory start till there is no collision. Tip: try the methods available for you in the config file (see below).
+- [ ]   Effectively redistribute IPs to avoid collisions and to achieve lower inspection time.
 
 Note that the task in its generality is very complex to be solved in a limited time during several days.
 You are not expected to solve every subproblem so do not feel bad if you don't.

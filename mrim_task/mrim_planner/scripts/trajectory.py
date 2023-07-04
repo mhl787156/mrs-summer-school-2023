@@ -206,7 +206,10 @@ class TrajectoryUtils():
                 #  - see/use distEuclidean() in utils.py
 
                 # [STUDENTS TODO] Change variable 'desired_heading', nothing else
-                desired_heading = waypoints[0].heading
+                # desired_heading = waypoints[0].heading
+                delta_euclidean = distEuclidean(subtraj_1, subtraj_0)
+                proportion = delta_euclidean / subtraj_len
+                desired_heading = current_heading + delta_heading * proportion
 
                 # replace heading
                 current_heading   = desired_heading
@@ -454,12 +457,12 @@ class TrajectoryUtils():
             sampling_step = trajectory.dT
 
             # STUDENTS TODO: Sample the path parametrization 'toppra_trajectory' (instance of TOPPRA library).
-            raise NotImplementedError('[STUDENTS TODO] Trajectory sampling not finished. You have to implement it on your own.')
+            # raise NotImplementedError('[STUDENTS TODO] Trajectory sampling not finished. You have to implement it on your own.')
             # Tips:
             #  - check code examples for TOPPRA (look for eval() function): https://hungpham2511.github.io/toppra/index.html
             #  - use 'toppra_trajectory' and the predefined sampling step 'sampling_step'
-
-            samples = [] # [STUDENTS TODO] Fill this variable with trajectory samples
+            ts_sample = np.arange(0, toppra_trajectory.duration, sampling_step)
+            samples = toppra_trajectory(ts_sample) # [STUDENTS TODO] Fill this variable with trajectory samples
 
             # Convert to Trajectory class
             poses      = [Pose(q[0], q[1], q[2], q[3]) for q in samples]

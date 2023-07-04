@@ -72,8 +72,7 @@ class Node:
         b = self.pos[1] - self.goal[1]
         c = self.pos[2] - self.goal[2]
 
-        return sqrt(a**2 + b**2 + c**2)
-        # raise NotImplementedError('[STUDENTS TODO] Heuristic function guiding the state space exploration not implemented. You have to finish it on your own.')
+        raise NotImplementedError('[STUDENTS TODO] Heuristic function guiding the state space exploration not implemented. You have to finish it on your own.')
 # # #}
 # # #{ class AStar
 class AStar():
@@ -94,23 +93,12 @@ class AStar():
     def halveAndTest(self, path):
         pt1 = path[0]
         pt2 = path[-1]
-        rat = int(pt1/pt2)
         
         if len(path) <= 2:
             return path
-        else
-            while rat>1
-                path=path/rat
-                rat=rat-1
-                if rat==1
-                    return path
-                    break
-            
-                
 
-
-        #raise NotImplementedError('[STUDENTS TODO] A*: path straightening is not finished. Finish it on your own.')
-        
+        raise NotImplementedError('[STUDENTS TODO] A*: path straightening is not finished. Finish it on your own.')
+        # Tips:
         #  - divide the given path by a certain ratio and use this method recursively
 
         # [STUDENTS TODO] REMOVE

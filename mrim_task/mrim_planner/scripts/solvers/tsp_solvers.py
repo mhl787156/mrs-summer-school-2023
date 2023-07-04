@@ -269,14 +269,27 @@ class TSPSolver3D():
             # Prepare positions of the viewpoints in the world
             positions = np.array([vp.pose.point.asList() for vp in viewpoints])
 
-            raise NotImplementedError('[STUDENTS TODO] KMeans clustering of viewpoints not implemented. You have to finish it on your own')
+            # raise NotImplementedError('[STUDENTS TODO] KMeans clustering of viewpoints not implemented. You have to finish it on your own')
             # Tips:
             #  - utilize sklearn.cluster.KMeans implementation (https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html)
             #  - after finding the labels, you may want to swap the classes (e.g., by looking at the distance of the UAVs from the cluster centers)
             #  - Find the start poses of the UAVs in problem.start_poses.position.{x,y,z}
 
-            # TODO: fill 1D list 'labels' of size len(viewpoints) with indices of the robots
-            labels = [randint(0, k - 1) for vp in viewpoints]
+            clusters = KMeans(k).fit(positions)
+            start_poses = np.array([np.array([
+                problem.start_poses[i].position.x,
+                problem.start_poses[i].position.y,
+                problem.start_poses[i].position.z])
+                for i in range(k)])
+            closest = np.argmin(np.linalg.norm(clusters.cluster_centers_ - start_poses, axis=0))
+            
+            # TODO DONE: fill 1D list 'labels' of size len(viewpoints) with indices of the robots
+            labels = clusters.labels_
+            if closest == 1:
+                labels = 1 - labels
+
+            rospy.loginfo(f"Run Clustering with number of viewpoints {len(viewpoints)}, labels {labels}, start_poses {start_poses}, closest {closest}")
+            
 
         ## | -------------------- Random clustering ------------------- |
         else:

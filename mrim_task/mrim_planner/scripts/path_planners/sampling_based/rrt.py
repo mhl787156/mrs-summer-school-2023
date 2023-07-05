@@ -82,7 +82,7 @@ class RRT:
         if straighten:
             for i in range(5): # Probabilistically break up
                 # length_last_path = len(path)
-                div = np.random.uniform(0.2, 0.8)
+                div = np.random.uniform(0.3, 0.7)
                 path = self.halveAndTest(path, division=div)
                 # print(f"Straightening path ({i}, {k}) Length: {len(path)}, div: {div}")
                 # if len(path) == length_last_path:
@@ -241,7 +241,7 @@ class RRT:
         for neighbor in neighborhood_points: 
             
             parent= closest_point
-            cost1= self.tree.get_cost(neighbor) + distEuclidean(neighbor, closest_point)
+            cost1= distEuclidean(neighbor, closest_point)
 
             if cost1<=cost:
                 break;
@@ -304,6 +304,7 @@ class RRT:
     def halveAndTest(self, path, division=0.5):
         
         if len(path) <= 2:
+            print(f"Returning path, less than two {path}")
             return path
         
         pt1 = path[0][0:3]
@@ -314,13 +315,12 @@ class RRT:
         #  - divide the given path by a certain ratio and use this method recursively
         #  - validateLinePath() returns true if there are no obstacles between two points and vice-versa
 
-        div_point = int(len(path) * division)
+        div_point = min(max(int(len(path) * division), 1), len(path) - 1)
 
         if not self.validateLinePath(pt1, pt2, check_bounds=False):
-            
             # [STUDENTS TODO] Replace seg1 and seg2 variables effectively
-            seg1 = self.halveAndTest(path[:div_point])
-            seg2 = self.halveAndTest(path[div_point:])
+            seg1 = self.halveAndTest(path[:div_point], division)
+            seg2 = self.halveAndTest(path[div_point:], division)
 
             seg1.extend(seg2)
             return seg1

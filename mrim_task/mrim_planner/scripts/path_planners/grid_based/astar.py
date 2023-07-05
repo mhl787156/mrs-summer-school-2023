@@ -92,26 +92,26 @@ class AStar():
         c = first[2] - second[2]
         return sqrt(a**2 + b**2 + c**2)
 
-    def halveAndTest(self, path):
-        pt1 = path[0]
-        pt2 = path[-1]
-        
+    def halveAndTest(self, path, division):
+
         if len(path) <= 2:
             return path
+        
+        pt1 = path[0]
+        pt2 = path[-1]
 
         # raise NotImplementedError('[STUDENTS TODO] A*: path straightening is not finished. Finish it on your own.')
         # Tips:
         #  - divide the given path by a certain ratio and use this method recursively
 
-        div_point = int(len(path) / 2.0)
+        div_point = min(max(int(len(path) * division), 1), len(path) - 1)
 
         # [STUDENTS TODO] REMOVE
         if self.grid.obstacleBetween(pt1, pt2):
 
             # [STUDENTS TODO] Replace seg1 and seg2 variables effectively
-            seg1 = self.halveAndTest(path[:div_point])
-
-            seg2 = self.halveAndTest(path[div_point:])
+            seg1 = self.halveAndTest(path[:div_point], division)
+            seg2 = self.halveAndTest(path[div_point:], division)
 
             seg1.extend(seg2)
             return seg1
@@ -137,7 +137,9 @@ class AStar():
                 node = node.parent
             path.append(start)
             if self.straighten:
-                path = self.halveAndTest(path)
+                for _ in range(10):
+                    div = np.random.uniform(0.3, 0.7)
+                    path = self.halveAndTest(path, division=div)
             path.reverse()
             for node in path:
                 path_m.append(self.grid.indexToMetric(node))

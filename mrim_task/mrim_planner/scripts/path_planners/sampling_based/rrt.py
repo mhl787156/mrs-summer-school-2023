@@ -234,7 +234,7 @@ class RRT:
         for neighbor in neighborhood_points: 
             
             parent= closest_point
-            cost1= distEuclidean(neighbor, closest_point)
+            cost1= slef.tree.get_cost(neighbor) + distEuclidean(neighbor, closest_point)
 
             if cost1<=cost:
                 break;

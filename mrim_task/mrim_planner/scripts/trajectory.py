@@ -623,7 +623,7 @@ class TrajectoryUtils():
         ## |  [COLLISION AVOIDANCE METHOD #2]: Delay UAV with shorter trajectory at start until there is no collision occurring  |
         elif method == 'delay_till_no_collisions_occur':
 
-            raise NotImplementedError('[STUDENTS TODO] Collision prevention method \'delay_till_no_collisions_occur\' not finished. You have to finish it on your own.')
+            # raise NotImplementedError('[STUDENTS TODO] Collision prevention method \'delay_till_no_collisions_occur\' not finished. You have to finish it on your own.')
             # Tips:
             #  - you might select which trajectory it is better to delay
             #  - the smallest delay step is the sampling step stored in variable 'self.dT'
@@ -633,8 +633,9 @@ class TrajectoryUtils():
             traj_lens  = [t.getLength() for t in trajectories]
 
             # Decide which UAV should be delayed
-            # [STUDENTS TODO] CHANGE BELOW
-            delay_robot_idx, nondelay_robot_idx = 0, 1
+            # [STUDENTS TODO] CHANGING - Mickey
+            sorted_times = np.argsort(traj_times)
+            delay_robot_idx, nondelay_robot_idx = sorted_times[0], sorted_times[1]
 
             # TIP: use function `self.trajectoriesCollide()` to check if two trajectories are in collision
             collision_flag, collision_idx = \
@@ -644,13 +645,20 @@ class TrajectoryUtils():
             while collision_flag:
 
                 # delay the shorter-trajectory UAV at the start point by sampling period
+                print(f"Collision Detected, delaying {delay_t} for drone {delay_robot_idx}")
+                # if i < 10:
+                delay_t += delay_step
+                # TIP: use function `trajectory.delayStart(X)` to delay a UAV at the start location by X seconds
+                trajectories[delay_robot_idx].delayStart(delay_step)
 
-                if i < 10:
-                    delay_t += delay_step
-                    # TIP: use function `trajectory.delayStart(X)` to delay a UAV at the start location by X seconds
-                    trajectories[delay_robot_idx].delayStart(delay_step)
-                else:
-                    collision_flag = False
+                # TIP: use function `self.trajectoriesCollide()` to check if two trajectories are in collision
+                collision_flag, collision_idx = \
+                    self.trajectoriesCollide(trajectories[delay_robot_idx], trajectories[nondelay_robot_idx], safety_distance)
+
+                # else:
+                #     collision_flag = False
+                #     print(f"Collision Detected, surpa")
+            
 
         # # #}
 

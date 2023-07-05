@@ -79,9 +79,10 @@ Please go through the code and its inline comments to give you a better idea abo
 - [x] Improve assignment of inspected points from 🟣 between the two UAVs (random by default).
 - [?] Try different parameters of path planners (e.g., grid resolution or sampling distance) and evaluate their impact on the quality of your solution.
 - [ ] Increase performance of the chosen path planner (e.g., by path straightening or implementing informed RRT).
+  - [x] Implemented Path Straightening for A* and RRT
 - [x]  Consider flight time instead of path length when searching for the optimal sequence of locations in TSP.
 - [x] Apply path smoothing and continuous trajectory sampling (no stops at waypoints) to speed up the flight. In the code, we have prepared the `toppra` library for computing path parametrizations [2]. Check out the documentation and try to utilize it.
-- [ ]  Postprocess the time-parametrized trajectories to resolve collisions. Start by improving the implemented collision avoidance, e.g., by delaying trajectory start till there is no collision. Tip: try the methods available for you in the config file (see below).
+- [x]  Postprocess the time-parametrized trajectories to resolve collisions. Start by improving the implemented collision avoidance, e.g., by delaying trajectory start till there is no collision. Tip: try the methods available for you in the config file (see below).
 - [ ]   Effectively redistribute IPs to avoid collisions and to achieve lower inspection time.
 
 Note that the task in its generality is very complex to be solved in a limited time during several days.

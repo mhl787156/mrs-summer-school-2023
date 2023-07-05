@@ -239,7 +239,7 @@ class RRT:
 
         neighborhood_points = self.getPointsInNeighborhood(point, neighborhood)
         for neighbor in neighborhood_points: 
-            cost1= self.tree.get_cost(point) + distEuclidean(neighbor, point)
+            cost1= distEuclidean(neighbor, closest_point)
 
             if cost1<=cost:
                 break;

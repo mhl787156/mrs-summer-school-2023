@@ -142,7 +142,7 @@ class MrimPlanner:
 
         ## | ----- initialize objects for TSP and trajectory utils ---- |
         tsp_solver       = TSPSolver3D()
-        trajectory_utils = TrajectoryUtils(self._max_velocity, self._max_acceleration, self._trajectory_dt)
+        trajectory_utils = TrajectoryUtils(self._max_velocity, self._max_acceleration, self._max_heading_rate, self._max_heading_acceleration, self._trajectory_dt)
 
         # # #{ Cluster target locations
 
@@ -210,7 +210,7 @@ class MrimPlanner:
         for i in range(problem.number_of_robots):
 
             ## | --------------- Plan tour with a TSP solver -------------- |
-            robot_waypoints = tsp_solver.plan_tour(problem, viewpoints[i], self._path_planner) # find decoupled TSP tour over viewpoints
+            robot_waypoints = tsp_solver.plan_tour(problem, viewpoints[i], self._path_planner, trajectory_utils, i) # find decoupled TSP tour over viewpoints
             waypoints.append(robot_waypoints)
 
             ## | ------------- add waypoints to visualization ------------- |

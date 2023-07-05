@@ -79,7 +79,7 @@ class TSPSolver3D():
 
     # #{ plan_tour()
 
-    def plan_tour(self, problem, viewpoints, path_planner=None):
+    def plan_tour(self, problem, viewpoints, path_planner=None, trajectory_utils=None, agent=None):
         '''
         Solve TSP on viewpoints with given goals and starts
 
@@ -87,6 +87,7 @@ class TSPSolver3D():
             problem (InspectionProblem): task problem
             viewpoints (list[Viewpoint]): list of Viewpoint objects
             path_planner (dict): dictionary of parameters
+            trajecotry_utils (TrajectoryUtils): Adding dynamics for estimating time
 
         Returns:
             path (list): sequence of points with start equaling the end
@@ -116,6 +117,30 @@ class TSPSolver3D():
 
                 # estimate distances between the viewpoints
                 path, distance = self.compute_path(g1, g2, path_planner, path_planner['distance_estimation_method'])
+                for p in path:
+                    p.heading = 0.0
+
+                if agent is not None:
+                    # Use time as distance 
+                    # distance = trajectory_utils.max_velocity[agent] / distance
+
+                    # time to max speed accelerating at max accel * 2 + time to traverse remaining distance
+                    time_to_max_accel = trajectory_utils.max_velocity[agent] / trajectory_utils.max_acceleration[agent] 
+                    dist_to_max_accel = trajectory_utils.max_velocity[agent]**2 / 2 * trajectory_utils.max_acceleration[agent] 
+
+                    if dist_to_max_accel > distance:
+                        distance = time_for_dist_remaining = trajectory_utils.max_velocity[agent] / distance
+                    elif dist_to_max_accel*2 > distance:
+                        distance = time_for_dist_remaining = trajectory_utils.max_velocity[agent] / distance
+                    else:
+                        dist_remaining = distance - 2* dist_to_max_accel
+                        time_for_dist_remaining = trajectory_utils.max_velocity[agent] / dist_remaining
+
+                        distance = time_to_max_accel * 2 + time_for_dist_remaining
+
+                    # traj = trajectory_utils.computeTimeParametrization(path, trajectory_utils.constraints_velocity, trajectory_utils.constraints_acceleration)
+                    # distance = traj.duration
+                    rospy.loginfo(f"Calculating distance for agent {agent} from point ({a}, {b}) with distance {distance}")
 
                 # store paths/distances in matrices
                 self.paths[(a, b)]   = path

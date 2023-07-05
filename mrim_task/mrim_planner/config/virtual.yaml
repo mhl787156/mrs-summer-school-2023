@@ -9,13 +9,13 @@ tsp:
 
 # Parameters for path planning
 path_planner:
-  timeout: 10.0              # (s) timeout for single start-to-goal planning
+  timeout: 20.0              # (s) timeout for single start-to-goal planning
   method: 'rrt'              # [STUDENTS TODO: implement better method than the default] Method for generating start-to-goal paths: [euclidean, astar, rrt (default), rrtstar]
   straighten_paths: false    # [STUDENTS TODO: implement better method than the default] Path straightening flag (default: false)
 
   # RRT and RRT* method parameters
   rrt:
-    branch_size: 1.0 # (m)
+    branch_size: 1.5 # (m)
     sampling:
       method: 'uniform' # [STUDENTS TODO: implement better method than the default] Method for sampling random points: [uniform (default), gaussian]
       gaussian:
@@ -25,16 +25,16 @@ path_planner:
 
   # A* method parameters
   astar:
-    grid_resolution: 1.0 # (m)
+    grid_resolution: 0.5 # (m)
 
 # Parameters for path smoothing
 path_smoothing:
   sampling_step: 0.1  # (m)
-  lookahead_dist: 1.0 # (m)
+  lookahead_dist: 0.3 # (m)
 
 # Parameters for sampling the UAVs' trajectories
 trajectory_sampling:
-  with_stops: False # [STUDENTS TODO: implement better method than the default] If true, UAVs will stop at each waypoint (default: true)
+  with_stops: True # [STUDENTS TODO: implement better method than the default] If true, UAVs will stop at each waypoint (default: true)
 
 # Parameters for UAV-to-UAV collision avoidance
 collision_avoidance:

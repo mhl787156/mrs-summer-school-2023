@@ -44,7 +44,7 @@ class Point:
     def norm(self):
         return np.linalg.norm(self.asList())
 
-    def __str__(self):
+    def __repr__(self):
         return '({:.2f}, {:.2f}, {:.2f})'.format(self.x, self.y, self.z)
 
     def __eq__(self, other):
@@ -112,8 +112,8 @@ class Pose:
     def asList(self):
         return [self.point.x, self.point.y, self.point.z, self.heading]
 
-    def __str__(self):
-        return '({:.2f}, {:.2f}, {:.2f}, {:.2f})'.format(self.point.x, self.point.y, self.point.z, self.heading)
+    def __repr__(self):
+        return "({}, {}, {}, {})".format(self.point.x, self.point.y, self.point.z, self.heading)
 
     def __eq__(self, other):
         if isinstance(other, Pose):

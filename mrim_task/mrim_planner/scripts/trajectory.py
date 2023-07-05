@@ -137,10 +137,17 @@ class Trajectory:
 class TrajectoryUtils():
 
     # #{ __init__()
-    def __init__(self, max_velocity, max_acceleration, dT):
+    def __init__(self, max_velocity, max_acceleration, max_heading_rate, max_heading_acceleration, dT):
         self.dT               = dT
         self.max_velocity     = max_velocity
         self.max_acceleration = max_acceleration
+        self.max_heading_rate = max_heading_rate
+        self.max_heading_acceleration = max_heading_acceleration
+
+        # create dynamic constraints
+        self.constraints_velocity     = [self.max_velocity[0], self.max_velocity[1], self.max_velocity[2], self.max_heading_rate] # per axis velocity limits
+        self.constraints_acceleration = [self.max_acceleration[0], self.max_acceleration[1], self.max_acceleration[2], self.max_heading_acceleration] # per axis acceleration limits
+
     # #}
 
     ## | ------------- Functions: trajectory (re)sampling ------------- |

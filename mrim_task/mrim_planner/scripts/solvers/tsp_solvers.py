@@ -117,9 +117,7 @@ class TSPSolver3D():
 
                 # estimate distances between the viewpoints
                 path, distance = self.compute_path(g1, g2, path_planner, path_planner['distance_estimation_method'])
-                for p in path:
-                    p.heading = 0.0
-
+                
                 if agent is not None:
                     # Use time as distance 
                     # distance = trajectory_utils.max_velocity[agent] / distance
@@ -138,6 +136,8 @@ class TSPSolver3D():
 
                         distance = time_to_max_accel * 2 + time_for_dist_remaining
 
+                    # for p in path:
+                    #     p.heading = 0.0
                     # traj = trajectory_utils.computeTimeParametrization(path, trajectory_utils.constraints_velocity, trajectory_utils.constraints_acceleration)
                     # distance = traj.duration
                     rospy.loginfo(f"Calculating distance for agent {agent} from point ({a}, {b}) with distance {distance}")

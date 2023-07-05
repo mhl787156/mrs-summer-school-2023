@@ -80,8 +80,14 @@ class RRT:
 
         # smooth the path
         if straighten:
-            for i in range(2):
-                path = self.halveAndTest(path)
+            for i in range(5): # Probabilistically break up
+                # length_last_path = len(path)
+                div = np.random.uniform(0.2, 0.8)
+                path = self.halveAndTest(path, division=div)
+                # print(f"Straightening path ({i}, {k}) Length: {len(path)}, div: {div}")
+                # if len(path) == length_last_path:
+                #     break
+                # length_last_path = len(path)
 
         distance = 0.0
         for i in range(1, len(path)):
@@ -138,22 +144,23 @@ class RRT:
         point       = None
         point_valid = False
         while not point_valid:
-            x = np.random.normal(mean, sigma, 1)
-            y = np.random.normal(mean, sigma, 1)
-            z = np.random.normal(mean, sigma, 1)
-
-            #raise NotImplementedError('[STUDENTS TOD] Implement Gaussian sampling in RRT to speed up the process and narrow the paths.')
+            
+            p = np.random.normal(mean, sigma + sigma_offset, 3)
+          
+            #raise NotImplementedError('[STUDENTS TODO] Implement Gaussian sampling in RRT to speed up the process and narrow the paths.')
             # Tips:
             #  - sample from Normal distribution: use numpy.random.normal (https://numpy.org/doc/stable/reference/random/generated/numpy.random.normal.html)
             #  - to prevent deadlocks when sampling continuously, increase the sampling space by inflating the standard deviation of the gaussian sampling
 
             # STUDENTS TODO: Sample XYZ in the state space
-           # x = 0
-           # y = 0
-            #z = 0
+            x = p[0]
+            y = p[1]
+            z = p[2]
 
             point = Point(x, y, z)
             point_valid = self.pointValid(point)
+            
+            
 
         return point.asTuple()
     # # #}
@@ -289,19 +296,20 @@ class RRT:
     # # #}
 
     # # #{ halveAndTest()
-    def halveAndTest(self, path):
-        pt1 = path[0][0:3]
-        pt2 = path[-1][0:3]
+    def halveAndTest(self, path, division=0.5):
         
         if len(path) <= 2:
             return path
-
+        
+        pt1 = path[0][0:3]
+        pt2 = path[-1][0:3]
+        
         # raise NotImplementedError('[STUDENTS TODO] RRT: path straightening is not finished. Finish it on your own.')
         # Tips:
         #  - divide the given path by a certain ratio and use this method recursively
         #  - validateLinePath() returns true if there are no obstacles between two points and vice-versa
 
-        div_point = int(len(path) / 2.0)
+        div_point = int(len(path) * division)
 
         if not self.validateLinePath(pt1, pt2, check_bounds=False):
             

@@ -75,7 +75,7 @@ Please go through the code and its inline comments to give you a better idea abo
 **Tips for improving the solution:**
 
 - [x] Interpolate the heading between the samples. This is the first thing to solve if you want to score!
-- [ ] Test different methods available for estimating the distance between the VPs and for planning collision-free paths connecting the VPs [available planners: A*, RRT (default), RRT*].
+- [x] Test different methods available for estimating the distance between the VPs and for planning collision-free paths connecting the VPs [available planners: A*, RRT (default), RRT*].
 - [x] Improve assignment of inspected points from 🟣 between the two UAVs (random by default).
 - [?] Try different parameters of path planners (e.g., grid resolution or sampling distance) and evaluate their impact on the quality of your solution.
 - [ ] Increase performance of the chosen path planner (e.g., by path straightening or implementing informed RRT).

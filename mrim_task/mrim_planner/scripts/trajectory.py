@@ -603,7 +603,7 @@ class TrajectoryUtils():
     ## | -------- Functions: collision prevention/avoidance ------- |
 
     # # #{ resolveCollisions()
-    def resolveCollisions(self, method, problem, trajectories, safety_distance):
+    def resolveCollisions(self, method, problem, trajectories, safety_distance, safety_inflation=1.05):
         '''
         Postprocesses given trajectories such that there are no collisions.
 
@@ -619,6 +619,8 @@ class TrajectoryUtils():
         '''
 
         # # #{ Resolve collisions and resample trajectories
+
+        safety_distance *= safety_inflation # Inflate safety distances by 5%
 
         print("[COLLISION AVOIDANCE] method: {:s}".format(method))
         delay_robot_idx, delay_t = None, 0.0

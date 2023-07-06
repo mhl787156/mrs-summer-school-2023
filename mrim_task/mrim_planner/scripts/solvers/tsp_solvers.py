@@ -120,21 +120,21 @@ class TSPSolver3D():
                 
                 if agent is not None:
                     # Use time as distance 
-                    # distance = trajectory_utils.max_velocity[agent] / distance
+                    distance = trajectory_utils.max_velocity[agent] / distance
 
                     # time to max speed accelerating at max accel * 2 + time to traverse remaining distance
-                    time_to_max_accel = trajectory_utils.max_velocity[agent] / trajectory_utils.max_acceleration[agent] 
-                    dist_to_max_accel = trajectory_utils.max_velocity[agent]**2 / 2 * trajectory_utils.max_acceleration[agent] 
+                    # time_to_max_accel = trajectory_utils.max_velocity[agent] / trajectory_utils.max_acceleration[agent] 
+                    # dist_to_max_accel = trajectory_utils.max_velocity[agent]**2 / 2 * trajectory_utils.max_acceleration[agent] 
 
-                    if dist_to_max_accel > distance:
-                        distance = time_for_dist_remaining = trajectory_utils.max_velocity[agent] / distance
-                    elif dist_to_max_accel*2 > distance:
-                        distance = time_for_dist_remaining = trajectory_utils.max_velocity[agent] / distance
-                    else:
-                        dist_remaining = distance - 2* dist_to_max_accel
-                        time_for_dist_remaining = trajectory_utils.max_velocity[agent] / dist_remaining
+                    # if dist_to_max_accel > distance:
+                    #     distance = time_for_dist_remaining = trajectory_utils.max_velocity[agent] / distance
+                    # elif dist_to_max_accel*2 > distance:
+                    #     distance = time_for_dist_remaining = trajectory_utils.max_velocity[agent] / distance
+                    # else:
+                    #     dist_remaining = distance - 2* dist_to_max_accel
+                    #     time_for_dist_remaining = trajectory_utils.max_velocity[agent] / dist_remaining
 
-                        distance = time_to_max_accel * 2 + time_for_dist_remaining
+                    #     distance = time_to_max_accel * 2 + time_for_dist_remaining
 
                     # for p in path:
                     #     p.heading = 0.0

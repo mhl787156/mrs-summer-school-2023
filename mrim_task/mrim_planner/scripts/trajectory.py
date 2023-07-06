@@ -216,7 +216,8 @@ class TrajectoryUtils():
                 # desired_heading = waypoints[0].heading
                 delta_euclidean = distEuclidean(subtraj_1, subtraj_0)
                 proportion = delta_euclidean / subtraj_len
-                desired_heading = current_heading + delta_heading * proportion
+                desired_heading = wrapAngle(current_heading + delta_heading * proportion)
+                # desired_heading = waypoints[0].heading
 
                 # replace heading
                 current_heading   = desired_heading
@@ -468,8 +469,9 @@ class TrajectoryUtils():
             # Tips:
             #  - check code examples for TOPPRA (look for eval() function): https://hungpham2511.github.io/toppra/index.html
             #  - use 'toppra_trajectory' and the predefined sampling step 'sampling_step'
+            print(f"Velocity Limits: {velocity_limits}, acceleration_limits: {acceleration_limits}")
             ts_sample = np.arange(0, toppra_trajectory.duration, sampling_step)
-            toppra_trajectory.plot_parametrization()
+            # toppra_trajectory.plot_parametrization()
 
             samples = toppra_trajectory(ts_sample) # [STUDENTS TODO] Fill this variable with trajectory samples
 

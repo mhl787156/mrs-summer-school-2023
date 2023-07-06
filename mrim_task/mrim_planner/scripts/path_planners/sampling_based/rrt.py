@@ -60,7 +60,7 @@ class RRT:
         self.tree              = Tree(self.start)
         self.bounds            = path_planner['bounds']
         self.kdtree            = path_planner['obstacles_kdtree']
-        self.safety_distance   = path_planner['safety_distance']
+        self.safety_distance   = path_planner['safety_distance'] + 1.05
         self.timeout           = path_planner['timeout']
         
         self.gaussian_sampling = path_planner['rrt/sampling/method'] == 'gaussian'

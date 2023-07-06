@@ -142,7 +142,7 @@ class MrimPlanner:
 
         ## | ----- initialize objects for TSP and trajectory utils ---- |
         tsp_solver       = TSPSolver3D()
-        trajectory_utils = TrajectoryUtils(self._max_velocity, self._max_acceleration, self._max_heading_rate, self._max_heading_acceleration, self._trajectory_dt)
+        trajectory_utils = TrajectoryUtils(problem, self._max_velocity, self._max_acceleration, self._max_heading_rate, self._max_heading_acceleration, self._trajectory_dt)
 
         # # #{ Cluster target locations
 

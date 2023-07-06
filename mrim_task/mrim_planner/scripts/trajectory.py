@@ -469,7 +469,16 @@ class TrajectoryUtils():
             #  - check code examples for TOPPRA (look for eval() function): https://hungpham2511.github.io/toppra/index.html
             #  - use 'toppra_trajectory' and the predefined sampling step 'sampling_step'
             ts_sample = np.arange(0, toppra_trajectory.duration, sampling_step)
+            toppra_trajectory.plot_parametrization()
+
             samples = toppra_trajectory(ts_sample) # [STUDENTS TODO] Fill this variable with trajectory samples
+
+            # Something about increasing the time? distance? in cases with silly velocities or accelerations. 
+            for t1, t2, p1, p2 in zip(ts_sample, ts_sample[1:], samples, samples[1:]):
+                pass
+
+            
+
 
             # Convert to Trajectory class
             poses      = [Pose(q[0], q[1], q[2], q[3]) for q in samples]

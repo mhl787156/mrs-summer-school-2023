@@ -1,6 +1,6 @@
 problem:
   name: "four_towers_large.problem" # [single_tower.problem, four_towers_small.problem, four_towers_large.problem]
-  plot: False
+  plot: True
 
 # Parameters for Traveling Salesman Problem
 tsp:

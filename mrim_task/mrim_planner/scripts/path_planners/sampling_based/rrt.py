@@ -60,7 +60,7 @@ class RRT:
         self.tree              = Tree(self.start)
         self.bounds            = path_planner['bounds']
         self.kdtree            = path_planner['obstacles_kdtree']
-        self.safety_distance   = path_planner['safety_distance'] + 1.05
+        self.safety_distance   = path_planner['safety_distance'] * 1.05
         self.timeout           = path_planner['timeout']
         
         self.gaussian_sampling = path_planner['rrt/sampling/method'] == 'gaussian'
@@ -80,10 +80,10 @@ class RRT:
 
         # smooth the path
         if straighten:
-            for i in range(5): # Probabilistically break up
+            for i in range(10): # Probabilistically break up
                 # length_last_path = len(path)
-                div = np.random.uniform(0.3, 0.7)
-                path = self.halveAndTest(path, division=div)
+                # div = np.random.normal(0.5, 0.1)
+                path = self.halveAndTest(path, division=0.5)
                 # print(f"Straightening path ({i}, {k}) Length: {len(path)}, div: {div}")
                 # if len(path) == length_last_path:
                 #     break

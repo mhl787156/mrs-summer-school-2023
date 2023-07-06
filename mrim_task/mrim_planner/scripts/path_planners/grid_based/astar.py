@@ -138,8 +138,8 @@ class AStar():
             path.append(start)
             if self.straighten:
                 for _ in range(10):
-                    div = np.random.uniform(0.3, 0.7)
-                    path = self.halveAndTest(path, division=div)
+                    # div = np.random.normal(0.5, 0.1)
+                    path = self.halveAndTest(path, division=0.5)
             path.reverse()
             for node in path:
                 path_m.append(self.grid.indexToMetric(node))

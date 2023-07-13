@@ -1,5 +1,10 @@
 # MRS Summer School 2022: multi-robot inspection and monitoring
 
+
+We participated in both the simulation and real life challenge. We came 4th in the real life challenge with a time of 78 seconds. Unfortunately our solution timed out on the larger simulated challenge. It was great fun! Thanks to the collaborators in our team. - Mickey Li
+
+## Instructions
+
 | Status       | 18.04                                                                                                                                        | 20.04                                                                                                                                       | 22.04                                                                                                                                       |
 | :---         | :---:                                                                                                                                        | :---:                                                                                                                                       | :---:                                                                                                                                       |
 | Installation | [![Status](https://github.com/ctu-mrs/summer-school-2022/workflows/Bionic/badge.svg)](https://github.com/ctu-mrs/summer-school-2022/actions) | [![Status](https://github.com/ctu-mrs/summer-school-2022/workflows/Focal/badge.svg)](https://github.com/ctu-mrs/summer-school-2022/actions) | [![Status](https://github.com/ctu-mrs/summer-school-2022/workflows/Jammy/badge.svg)](https://github.com/ctu-mrs/summer-school-2022/actions) |
